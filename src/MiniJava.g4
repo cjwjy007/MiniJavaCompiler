@@ -3,7 +3,7 @@ grammar MiniJava;
 init    : mainClass (classDeclaration)* EOF;
 
 
-//parser rule
+//parser rules
 mainClass: 'class' ID '{' 'public' 'static' 'void' 'main' '(' 'String' '[' ']' ID ')' '{' statement '}' '}';
 classDeclaration : 'class' ID ('extends' ID)? '{' (varDeclaration)* (methodDeclaration)* '}';
 varDeclaration   : type ID ';';
@@ -36,8 +36,30 @@ expr    : expr ('&&'|'<'|'+'|'-'|'*') expr
         ;
 
 
-//lexer rule
-ID :  [a-zA-Z] [a-zA-Z0-9]* ;
+//lexer rules
+ID :  [a-zA-Z_$][a-zA-Z0-9_]* ;
 INT_LITE : ('0' | [1-9] [0-9]*);
-
+WS      : [ \t\r\n]+ -> skip ;
+BLOCK_COMMENT : '/*' .*? '*/' -> skip;
+LINE_COMMENT: '//' ~[\r\n]* -> skip;
+ASSIGN  : '=';
+GT      : '>';
+LT      : '<';
+GE      : '>=';
+LE      : '<=';
+PLUS    : '+';
+MINUS   : '-';
+TIMES   : '*';
+BANG    : '!';
+AND     : '&&';
+OR      : '||';
+L_PAREN : '(';
+R_PAREN : ')';
+L_BRACK : '[';
+R_BRACK : ']';
+L_BRACE : '{';
+R_BRACE : '}';
+COMMA   : ',';
+DOT     : '.';
+SEMI    : ';';
 
