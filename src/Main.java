@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-
 public class Main {
     public static void main(String[] args) throws IOException {
         //get input
@@ -22,6 +21,8 @@ public class Main {
 
         //syntax analysis
         MiniJavaParser parser = new MiniJavaParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(new ErrorReportListener());
         ParseTree tree = parser.init();
 
         // Show AST in GUI
