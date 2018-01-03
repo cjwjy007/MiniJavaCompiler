@@ -21,9 +21,25 @@ statement: '{' (statement)* '}'
          | ID '[' expr ']' '=' expr ';'
          ;
 expr    : expr ('&&'|'<'|'+'|'-'|'*') expr
+        | expr ('&&' | '<' | '+' | '-' | '*' )
+                {notifyErrorListeners(this.getCurrentToken(),
+                    "Missing right operand",
+                    new OperandMissingException(this));}
+        | ('&&' | '<' | '+' | '-' | '*' ) expr
+                {notifyErrorListeners(this.getCurrentToken(),
+                    "Missing left operand",
+                    new OperandMissingException(this));}
         | expr '[' expr ']'
         | expr '.' 'length'
         | expr '.' ID '(' (expr (',' expr)*)? ')'
+        | expr '.' ID '(' (expr (',' expr)* )? ')' ')'
+                        {notifyErrorListeners(this.getCurrentToken(),
+                            "Too many parentheses",
+                            new ParenthesisDismatchException(this));}
+        | expr '.' ID '(' (expr (',' expr)* )?
+             {notifyErrorListeners(this.getCurrentToken(),
+                 "Missing closing ')'",
+                 new ParenthesisDismatchException(this));}
         | INT_LITE
         | 'true'
         | 'false'
@@ -37,7 +53,10 @@ expr    : expr ('&&'|'<'|'+'|'-'|'*') expr
 
 
 //lexer rules
-ID :  [a-zA-Z_$][a-zA-Z0-9_]* ;
+ID :  [a-zA-Z_$][a-zA-Z0-9_]*
+   |  [0-9][a-zA-Z0-9_]*
+      {System.err.println("[Lexical Error]:\tIdentifier cannot start with number: " + getText());}
+   ;
 INT_LITE : ('0' | [1-9] [0-9]*);
 WS      : [ \t\r\n]+ -> skip ;
 BLOCK_COMMENT : '/*' .*? '*/' -> skip;

@@ -24,9 +24,6 @@ public class Main {
         MiniJavaParser parser = new MiniJavaParser(tokens);
         ParseTree tree = parser.init();
 
-        // print tree
-        System.out.println(tree.toStringTree(parser));
-
         // Show AST in GUI
         JFrame frame = new JFrame("ANTLR AST");
         JPanel panel = new JPanel();
