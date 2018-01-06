@@ -22,15 +22,16 @@ public class Main {
         //syntax analysis
         MiniJavaParser parser = new MiniJavaParser(tokens);
         parser.removeErrorListeners();
-        parser.addErrorListener(new ErrorReportListener());
+        parser.addErrorListener(new MiniJavaBaseErrorListener());
         ParseTree tree = parser.init();
 
         // Show AST in GUI
-        JFrame frame = new JFrame("ANTLR AST");
+        JFrame frame = new JFrame("AST");
         JPanel panel = new JPanel();
         TreeViewer viewer = new TreeViewer(Arrays.asList(parser.getRuleNames()), tree);
         panel.add(viewer);
-        JScrollPane scrollPanel = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        JScrollPane scrollPanel = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         frame.getContentPane().add(scrollPanel);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(800, 400);
